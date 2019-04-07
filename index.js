@@ -1,3 +1,6 @@
+// Gestion des variables d'environnements
+require("dotenv").config();
+
 //creation d'un serveur
 const express = require("express");
 const app = express();

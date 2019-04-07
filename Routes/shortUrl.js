@@ -4,7 +4,7 @@ const ShortUrl = require("../Models/ShortUrl.js");
 const randomGen = require("../tools/randomGen");
 
 // CONSTANTE
-const serverPath = "http://localhost:3000/";
+const SERVER_PATH = process.env.API_URL;
 
 // FONCTIONS
 // Vérification si la chaine générée existe déjà en base
@@ -48,7 +48,7 @@ router.post("/shortenUrl", async (req, res) => {
 
       const shortUrlList = await ShortUrl.find();
 
-      return res.status(200).json({ serverPath, shortUrlList });
+      return res.status(200).json({ serverPath: SERVER_PATH, shortUrlList });
     } catch (error) {
       return res.status(400).json({
         error: {
@@ -70,7 +70,7 @@ router.post("/shortenUrl", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const shortUrlList = await ShortUrl.find();
-    return res.status(200).json({ serverPath, shortUrlList });
+    return res.status(200).json({ serverPath: SERVER_PATH, shortUrlList });
   } catch (error) {
     return res.status(400).json({
       error: {
@@ -116,7 +116,7 @@ router.post("/updatecounter", async (req, res) => {
         shortUrl.visitCounter = shortUrl.visitCounter + 1;
         await shortUrl.save();
         const shortUrlList = await ShortUrl.find();
-        return res.status(200).json({ serverPath, shortUrlList });
+        return res.status(200).json({ serverPath: SERVER_PATH, shortUrlList });
       }
     }
     return res.status(400).json({
