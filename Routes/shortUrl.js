@@ -3,9 +3,6 @@ const router = express.Router();
 const ShortUrl = require("../Models/ShortUrl.js");
 const randomGen = require("../tools/randomGen");
 
-// CONSTANTE
-const SERVER_PATH = process.env.API_URL;
-
 // FONCTIONS
 // Vérification si la chaine générée existe déjà en base
 const shortIdExists = async shortId => {
@@ -48,7 +45,7 @@ router.post("/shortenUrl", async (req, res) => {
 
       const shortUrlList = await ShortUrl.find();
 
-      return res.status(200).json({ serverPath: SERVER_PATH, shortUrlList });
+      return res.status(200).json({ shortUrlList });
     } catch (error) {
       return res.status(400).json({
         error: {
@@ -70,7 +67,7 @@ router.post("/shortenUrl", async (req, res) => {
 router.get("/", async (req, res) => {
   try {
     const shortUrlList = await ShortUrl.find();
-    return res.status(200).json({ serverPath: SERVER_PATH, shortUrlList });
+    return res.status(200).json({ shortUrlList });
   } catch (error) {
     return res.status(400).json({
       error: {
@@ -116,7 +113,7 @@ router.post("/updatecounter", async (req, res) => {
         shortUrl.visitCounter = shortUrl.visitCounter + 1;
         await shortUrl.save();
         const shortUrlList = await ShortUrl.find();
-        return res.status(200).json({ serverPath: SERVER_PATH, shortUrlList });
+        return res.status(200).json({ shortUrlList });
       }
     }
     return res.status(400).json({
@@ -130,6 +127,32 @@ router.post("/updatecounter", async (req, res) => {
       error: {
         message: "Update Counter: " + error.message,
         code: 150
+      }
+    });
+  }
+});
+
+// DELETE an url
+router.post("/deleteurl", async (req, res) => {
+  try {
+    if (req.body.shortUrl) {
+      const shortUrl = await ShortUrl.findOneAndRemove({ shortUrl: req.body.shortUrl });
+      if (shortUrl) {
+        const shortUrlList = await ShortUrl.find();
+        return res.status(200).json({ shortUrlList });
+      }
+    }
+    return res.status(400).json({
+      error: {
+        message: `Delete Url: shortUrl ${req.body.shortUrl} not found`,
+        code: 160
+      }
+    });
+  } catch (error) {
+    return res.status(400).json({
+      error: {
+        message: "Delete Url: " + error.message,
+        code: 170
       }
     });
   }
