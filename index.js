@@ -1,15 +1,15 @@
 // Gestion des variables d'environnements
 require("dotenv").config();
 
-//creation d'un serveur
+// Création du serveur Express
 const express = require("express");
 const app = express();
 
-//permet d 'utiliser des bodys
+// Pour lire le contenu des requêtes body
 const bodyParser = require("body-parser");
 app.use(bodyParser.json());
 
-//permet d'utiliser BD moongoDB
+// Simplifie l'utilisation de MongoDB
 const mongoose = require("mongoose");
 mongoose.connect(
   process.env.MONGODB_URI || "mongodb://localhost/short-url",
@@ -21,11 +21,11 @@ mongoose.connect(
   }
 );
 
-//donne accessibilité aux autres sites pour recuperer des infos
+// Permet aux sites ayant une url différente d'accéder au serveur
 const cors = require("cors");
 app.use(cors());
 
-// pour eviter que le header client affiche "express". vient combler des failles de securité
+// Masque le serveur "express", Comble des failles de securité
 const helmet = require("helmet");
 app.use(helmet());
 
